@@ -1,0 +1,30 @@
+{
+  "name": "live-fleet-grid-client",
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "description": "Vue 3 + Pinia live fleet grid client over a Go WebSocket feed",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@pinia/testing": "^0.1.7",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^14.12.3",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10",
+    "vitest": "^1.6.1",
+    "vue-tsc": "^2.0.16"
+  }
+}
