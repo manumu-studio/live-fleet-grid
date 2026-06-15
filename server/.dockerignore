@@ -1,7 +1,9 @@
 # .dockerignore - keep the build context small and reproducible. Only the Go
 # sources, go.mod, and go.sum are needed to build the binary.
-Dockerfile
-.dockerignore
+#
+# NOTE: do NOT add 'Dockerfile' here. Railway/BuildKit reads the Dockerfile from
+# the uploaded build-context snapshot; excluding it breaks the build with
+# "file with no instructions". COPY . . picking it up is harmless.
 *.md
 *.test
 *.out
