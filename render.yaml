@@ -1,0 +1,17 @@
+# render.yaml - Render blueprint for the Go WebSocket server. Render builds the
+# Dockerfile under server/ and injects PORT automatically. Set ALLOWED_ORIGINS
+# to the deployed client domain so the browser can open the socket.
+#
+# Railway needs no config file: point it at the server/ directory and it
+# auto-detects the Dockerfile. Set the same env vars in the Railway dashboard.
+services:
+  - type: web
+    name: live-fleet-grid-server
+    runtime: docker
+    rootDir: server
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      # Render injects PORT automatically; the server reads it (default 8080).
+      - key: ALLOWED_ORIGINS
+        value: https://lfg.manumustudio.com

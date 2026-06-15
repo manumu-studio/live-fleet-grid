@@ -1,0 +1,22 @@
+# Node / Vite
+node_modules/
+client/dist/
+client/.vite/
+client/node_modules/
+
+# Local env overrides (keep .env.example tracked)
+.env
+.env.local
+.env.*.local
+
+# Go build artifacts
+server/live-fleet-grid
+server/server
+*.exe
+*.test
+*.out
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
