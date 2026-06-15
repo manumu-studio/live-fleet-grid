@@ -2,6 +2,21 @@
 
 All notable changes to Live Fleet Grid are documented here. Versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.1.2] - 2026-06-15
+
+### Fixed
+
+- **Railway Docker build.** `server/.dockerignore` no longer excludes the `Dockerfile` itself. Railway/BuildKit reads the Dockerfile out of the uploaded build-context snapshot, so listing `Dockerfile` in `.dockerignore` stripped it from the snapshot and broke the build with `failed to parse dockerfile: file with no instructions`.
+
+### Added
+
+- **Deployment runbook.** `docs/DEPLOY.md` documents the exact Railway (server) and Vercel (client) settings, the monorepo build gotchas (Root Directory, the `Dockerfile Path = /server` directory trap, the `.dockerignore` exclusion trap, "Redeploy" replaying old config), the deploy order, and the production verification commands.
+- **Live demo link** in the README pointing at the deployed client, plus the live Railway/Vercel URLs in the Deployment section.
+
+### Notes
+
+- The app is now live: the Go server on Railway and the Vue client on Vercel at `https://lfg.manumustudio.com`. The WebSocket origin allow-list is enforced in production — the client origin upgrades to `101`, other origins get `403`. Most of the deploy work was Railway dashboard configuration, not code; the only repository change was the `.dockerignore` fix above.
+
 ## [0.1.1] - 2026-06-15
 
 ### Added

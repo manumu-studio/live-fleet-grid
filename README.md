@@ -2,6 +2,8 @@
 
 A focused real-time demo. A Go WebSocket server streams simulated vessel positions and statuses, and a Vue 3 + Pinia + TypeScript client renders a live-updating grid of vessel cards with a connection-health indicator. The interesting part is not the data: it is the real-time transport and how it behaves when the network or the server misbehaves.
 
+**🛰️ Live demo: [lfg.manumustudio.com](https://lfg.manumustudio.com)** — the Vue client backed by the live Go WebSocket server on Railway. Open it and watch the grid populate from the first snapshot, then flash as updates stream in; stop watching and the connection indicator keeps reporting health in real time.
+
 The "grid of live tracked entities" shape is a structural analogy to a VMS (Video Management System) camera/sensor wall: many independent live streams, each with a status, all updating concurrently, with an operator watching connection health. This demo streams JSON vessel positions, not video, so the analogy is structural rather than literal. The transferable part is the real-time transport layer and its failure handling.
 
 ## Tech Stack
@@ -77,6 +79,7 @@ The store is pure state. All transport and reliability logic lives in the compos
 ## Documentation
 
 - [CHANGELOG.md](CHANGELOG.md) - version history, starting at 0.1.0.
+- [docs/DEPLOY.md](docs/DEPLOY.md) - deployment runbook: exact Railway/Vercel settings, monorepo build gotchas, and production verification.
 - [docs/README.md](docs/README.md) - index of all project documentation.
 - [docs/architecture/SYSTEM_DIAGRAM.md](docs/architecture/SYSTEM_DIAGRAM.md) - data-flow diagram, component responsibilities, and the wire protocol.
 - [docs/decisions/ADR-001-resilient-websocket-transport.md](docs/decisions/ADR-001-resilient-websocket-transport.md) - why the socket is treated as unreliable and how it is hardened.
@@ -143,12 +146,12 @@ The Go tests assert the broadcast sequence number strictly increments and every 
 
 ### Deployment
 
-This is a static client plus a long-lived WebSocket server, so they deploy to different places.
+This is a static client plus a long-lived WebSocket server, so they deploy to different places. The live deployment runs the server on **Railway** (`https://live-fleet-grid-server-production.up.railway.app`) and the client on **Vercel** ([lfg.manumustudio.com](https://lfg.manumustudio.com)).
 
-- **Server (Go):** a multi-stage `server/Dockerfile` builds a static binary and runs it on Alpine. Both Railway (auto-detects the Dockerfile) and Render (`render.yaml` blueprint) work. Set `ALLOWED_ORIGINS` to the client domain; `PORT` is injected by the platform.
+- **Server (Go):** a multi-stage `server/Dockerfile` builds a static binary and runs it on Alpine. On Railway, set the service **Root Directory** to `server` (so the Dockerfile's relative `COPY` resolves) and leave Dockerfile Path empty; Render uses the `render.yaml` blueprint. Set `ALLOWED_ORIGINS` to the client domain; `PORT` is injected by the platform.
 - **Client (Vue):** a static Vite build. `client/vercel.json` configures the framework, build command, output directory, and SPA rewrite. Set `VITE_WS_URL` to the `wss://` URL of the deployed server.
 
-Deploy the server first to get its public URL, set `VITE_WS_URL` to `wss://<that-host>/ws`, deploy the client, then make sure `ALLOWED_ORIGINS` on the server includes the final client domain.
+Deploy the server first to get its public URL, set `VITE_WS_URL` to `wss://<that-host>/ws`, deploy the client, then make sure `ALLOWED_ORIGINS` on the server includes the final client domain. **See [docs/DEPLOY.md](docs/DEPLOY.md) for the full runbook** — exact per-field Railway/Vercel settings, the monorepo build gotchas, and the production verification commands.
 
 ## Project Structure
 
